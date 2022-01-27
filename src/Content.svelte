@@ -1,12 +1,14 @@
 <script>
     import { onMount } from "svelte";
     import { getContext } from "svelte";
+    import { bubble } from "svelte/internal";
     import { fly } from "svelte/transition";
     import PopupLong from "./PopupLong.svelte";
 
     const { open } = getContext("simple-modal");
 
     let pontos = 0;
+    let estado = "final";
 
     function shuffle(array) {
         let currentIndex = array.length,
@@ -68,6 +70,9 @@
     function next(event) {
         ordem_a_mostar = ordem_a_mostar + 1;
 
+        if (ordem_a_mostar == concorrentes.length) {
+            estado = "final";
+        }
         mostrar = concorrentes[ordem[ordem_a_mostar]];
     }
 
@@ -103,51 +108,134 @@
             }
         );
     };
+
+    const começarJogo = () => {
+        estado = "jogar";
+    };
+
+    function updateclipboard() {
+        let newClip = "Sõr doutor?\nAcertei " + pontos + ".💪🧐";
+        navigator.clipboard.writeText(newClip).then(
+            function () {
+                alert(
+                    "Copiei os resultados para o clipboard. Dá paste onde quiseres!"
+                );
+            },
+            function () {
+                alert("Algo não correu bem");
+            }
+        );
+    }
 </script>
 
 <div class="center">
-    {#if mostrar}
-        {#if mostrar["sexo"]}
-            <h1>A {mostrar["nome"]} é Sõr Doutora?</h1>
+    {#if estado == "jogar"}
+        {#if mostrar}
+            {#if mostrar["sexo"]}
+                <h1>A {mostrar["nome"]} é Sõr Doutora?</h1>
+            {:else}
+                <h1>O {mostrar["nome"]} é Sõr Doutor?</h1>
+            {/if}
+            <div>
+                <img alt={mostrar["nome"]} src={mostrar["img"]} />
+            </div>
         {:else}
-            <h1>O {mostrar["nome"]} é Sõr Doutor?</h1>
+            <h1>Loading...</h1>
         {/if}
-        <div>
-            <img alt={mostrar["nome"]} src={mostrar["img"]} />
+
+        <div class="buttons">
+            <div class="action_btn">
+                <button
+                    name="submit"
+                    class="action_btn"
+                    type="submit"
+                    on:click={doutor}>🤓 Doutor</button
+                >
+                <button
+                    name="submit"
+                    class="action_btn cancel"
+                    type="submit"
+                    on:click={plebe}
+                    >🤠 Plebe
+                </button>
+                <p id="saved" />
+            </div>
         </div>
-    {:else}
-        <h1>Loading...</h1>
+
+        <h2>Pontuação: {pontos} / {pontos_máximos}</h2>
+    {:else if estado == "inicial"}
+        <h1>Sõr Doutor?</h1>
+        <p>
+            Durante a campanha das <a
+                href="https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%B5es_legislativas_portuguesas_de_2022"
+                >legislativas 2022</a
+            > toda a gente falou da TAP ✈️, do rendimento rinimo universal 💰, da
+            pena de morte 💀, do orçamento chumbado 📉, das pontes desfeitas 💣 e
+            refeitas 🔨.
+        </p>
+        <p>
+            Mas ninguém levantou o problema que vale a pena discutir 📝...
+            Sempre que falam uns com os outros e mesmo quando são entrevistados
+            é sõr doutor 🤓 para aqui e para ali
+        </p>
+
+        <h3>Mas são todos sõr Doutor?</h3>
+
+        <img
+            style="max-width: 200px"
+            alt="pessoa a mergulhar"
+            src="./gifs/investigar.webp"
+        />
+
+        <button style="margin-top: 5px;" on:click={começarJogo}
+            >Clica para investigar</button
+        >
+    {:else if estado == "final"}
+        <h1 style="margin-top: 5vh;">✨ Fim! ✨</h1>
+
+        <h2>Pontuação Final: {pontos}/{pontos_máximos}</h2>
+
+        <h4>
+            Partilha com os teus amigos para ver quem é que tem futuro como
+            comentador político, ou não
+        </h4>
+
+        <img
+            style="max-width: 300px"
+            alt="gif de senhora a tentar cantar"
+            src="./gifs/fim.webp"
+        />
+        <button style="margin-top: 1vh" on:click={updateclipboard}
+            >Anunciar a boa nova</button
+        >
+
+        <p style="margin-top: 10vh;">
+            Então e quem trouxe quem trouxe esta pérola?
+        </p>
+        <p>
+            Não foi o <a href="https://luissilva.eu">Pingo Doce</a>
+        </p>
     {/if}
-
-    <div class="buttons">
-        <div class="action_btn">
-            <button
-                name="submit"
-                class="action_btn"
-                type="submit"
-                on:click={doutor}>🤓 Doutor</button
-            >
-            <button
-                name="submit"
-                class="action_btn cancel"
-                type="submit"
-                on:click={plebe}
-                >🤠 Plebe
-            </button>
-            <p id="saved" />
-        </div>
-    </div>
-
-    <h2>Pontuação: {pontos} / {pontos_máximos}</h2>
 </div>
 
 <style>
     h2 {
         margin-top: 5px;
     }
+
+    h4 {
+        text-align: justify;
+    }
+
     img {
         max-height: 400px;
         width: auto;
+    }
+
+    p {
+        max-width: 400px;
+        text-align: justify;
+        margin-top: 5px;
     }
 
     .center {

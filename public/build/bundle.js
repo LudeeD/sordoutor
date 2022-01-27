@@ -192,6 +192,14 @@ var app = (function () {
     function children(element) {
         return Array.from(element.childNodes);
     }
+    function set_style(node, key, value, important) {
+        if (value === null) {
+            node.style.removeProperty(key);
+        }
+        else {
+            node.style.setProperty(key, value, important ? 'important' : '');
+        }
+    }
     function toggle_class(element, name, toggle) {
         element.classList[toggle ? 'add' : 'remove'](name);
     }
@@ -313,6 +321,16 @@ var app = (function () {
     }
     function hasContext(key) {
         return get_current_component().$$.context.has(key);
+    }
+    // TODO figure out if we still want to support
+    // shorthand events, or if we want to implement
+    // a real bubbling mechanism
+    function bubble(component, event) {
+        const callbacks = component.$$.callbacks[event.type];
+        if (callbacks) {
+            // @ts-ignore
+            callbacks.slice().forEach(fn => fn.call(this, event));
+        }
     }
 
     const dirty_components = [];
@@ -1141,7 +1159,7 @@ var app = (function () {
     	let if_block;
     	let if_block_anchor;
     	let current;
-    	const if_block_creators = [create_if_block_2$1, create_else_block$2];
+    	const if_block_creators = [create_if_block_2$2, create_else_block$2];
     	const if_blocks = [];
 
     	function select_block_type(ctx, dirty) {
@@ -1275,7 +1293,7 @@ var app = (function () {
     }
 
     // (430:10) {#if isFunction(state.closeButton)}
-    function create_if_block_2$1(ctx) {
+    function create_if_block_2$2(ctx) {
     	let switch_instance;
     	let switch_instance_anchor;
     	let current;
@@ -1345,7 +1363,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_2$1.name,
+    		id: create_if_block_2$2.name,
     		type: "if",
     		source: "(430:10) {#if isFunction(state.closeButton)}",
     		ctx
@@ -2288,7 +2306,7 @@ var app = (function () {
     			h3 = element("h3");
     			t0 = text("Segundo a ");
     			a = element("a");
-    			a.textContent = "Wikipedipa";
+    			a.textContent = "Wikipedia";
     			t2 = space();
     			p0 = element("p");
     			q = element("q");
@@ -2305,13 +2323,13 @@ var app = (function () {
     			attr_dev(a, "href", "https://pt.wikipedia.org/wiki/Ant%C3%B3nio_Costa#Inf%C3%A2ncia_e_educa%C3%A7%C3%A3o");
     			add_location(a, file$4, 4, 14, 43);
     			add_location(h3, file$4, 3, 0, 23);
-    			add_location(u, file$4, 15, 30, 461);
-    			add_location(q, file$4, 11, 4, 196);
+    			add_location(u, file$4, 15, 30, 460);
+    			add_location(q, file$4, 11, 4, 195);
     			attr_dev(p0, "class", "svelte-mrwzid");
-    			add_location(p0, file$4, 10, 0, 187);
-    			add_location(b, file$4, 20, 13, 606);
+    			add_location(p0, file$4, 10, 0, 186);
+    			add_location(b, file$4, 20, 13, 605);
     			attr_dev(p1, "class", "svelte-mrwzid");
-    			add_location(p1, file$4, 20, 0, 593);
+    			add_location(p1, file$4, 20, 0, 592);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2406,7 +2424,7 @@ var app = (function () {
     			h3 = element("h3");
     			t0 = text("Segundo a ");
     			a = element("a");
-    			a.textContent = "Wikipedipa";
+    			a.textContent = "Wikipedia";
     			t2 = space();
     			p0 = element("p");
     			q = element("q");
@@ -2423,13 +2441,13 @@ var app = (function () {
     			attr_dev(a, "href", "https://pt.wikipedia.org/wiki/Rui_Rio#Carreira_acad%C3%A9mica");
     			add_location(a, file$3, 4, 14, 43);
     			add_location(h3, file$3, 3, 0, 23);
-    			add_location(u, file$3, 13, 8, 260);
-    			add_location(q, file$3, 11, 4, 174);
+    			add_location(u, file$3, 13, 8, 259);
+    			add_location(q, file$3, 11, 4, 173);
     			attr_dev(p0, "class", "svelte-mrwzid");
-    			add_location(p0, file$3, 10, 0, 165);
-    			add_location(b, file$3, 21, 13, 629);
+    			add_location(p0, file$3, 10, 0, 164);
+    			add_location(b, file$3, 21, 13, 628);
     			attr_dev(p1, "class", "svelte-mrwzid");
-    			add_location(p1, file$3, 21, 0, 616);
+    			add_location(p1, file$3, 21, 0, 615);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2518,19 +2536,17 @@ var app = (function () {
     	let t7;
     	let b;
     	let t9;
-    	let t10;
-    	let p2;
 
     	const block = {
     		c: function create() {
     			h3 = element("h3");
     			t0 = text("Segundo a ");
     			a = element("a");
-    			a.textContent = "Wikipedipa";
+    			a.textContent = "Wikipedia";
     			t2 = space();
     			p0 = element("p");
     			q = element("q");
-    			t3 = text("Catarina Martins nasceu no Porto, a 7 de setembro de 1973. Fez a\r\n        primeira classe em São Tomé, onde os pais eram cooperantes, e a segunda\r\n        e terceira classes em Cabo Verde. Regressa a Portugal aos nove anos e\r\n        vive em cidades como Aveiro, Vila Nova de Gaia e Lisboa. Licenciada em\r\n        Línguas e Literaturas Modernas, tem um mestrado em Linguística e ");
+    			t3 = text("Fez a primeira classe em São Tomé (...) a segunda e terceira classes em Cabo Verde. Regressa a Portugal aos nove\r\n        anos e vive em cidades como Aveiro, Vila Nova de Gaia e Lisboa.\r\n        Licenciada em Línguas e Literaturas Modernas, tem um mestrado em\r\n        Linguística e ");
     			u = element("u");
     			u.textContent = "frequência de doutoramento";
     			t5 = text(" em Didática das Línguas.");
@@ -2538,23 +2554,18 @@ var app = (function () {
     			p1 = element("p");
     			t7 = text("Portanto, ");
     			b = element("b");
-    			b.textContent = "não é";
+    			b.textContent = "é mais ou menos";
     			t9 = text(" Sõr Doutora !");
-    			t10 = space();
-    			p2 = element("p");
-    			p2.textContent = "Mas mais doutora que outros...";
     			attr_dev(a, "href", "https://pt.wikipedia.org/wiki/Catarina_Martins#Vida_pessoal");
     			add_location(a, file$2, 4, 14, 43);
     			add_location(h3, file$2, 3, 0, 23);
-    			add_location(u, file$2, 16, 73, 564);
-    			add_location(q, file$2, 11, 4, 172);
+    			add_location(u, file$2, 15, 22, 467);
+    			add_location(q, file$2, 11, 4, 171);
     			attr_dev(p0, "class", "svelte-mrwzid");
-    			add_location(p0, file$2, 10, 0, 163);
-    			add_location(b, file$2, 22, 13, 679);
+    			add_location(p0, file$2, 10, 0, 162);
+    			add_location(b, file$2, 19, 13, 558);
     			attr_dev(p1, "class", "svelte-mrwzid");
-    			add_location(p1, file$2, 22, 0, 666);
-    			attr_dev(p2, "class", "svelte-mrwzid");
-    			add_location(p2, file$2, 24, 0, 713);
+    			add_location(p1, file$2, 19, 0, 545);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2574,8 +2585,6 @@ var app = (function () {
     			append_dev(p1, t7);
     			append_dev(p1, b);
     			append_dev(p1, t9);
-    			insert_dev(target, t10, anchor);
-    			insert_dev(target, p2, anchor);
     		},
     		p: noop,
     		i: noop,
@@ -2586,8 +2595,6 @@ var app = (function () {
     			if (detaching) detach_dev(p0);
     			if (detaching) detach_dev(t6);
     			if (detaching) detach_dev(p1);
-    			if (detaching) detach_dev(t10);
-    			if (detaching) detach_dev(p2);
     		}
     	};
 
@@ -2639,7 +2646,7 @@ var app = (function () {
     		c: function create() {
     			h1 = element("h1");
     			h1.textContent = "❌ Parece que não 😞";
-    			attr_dev(h1, "class", "svelte-1xqsiqw");
+    			attr_dev(h1, "class", "svelte-lpvjxs");
     			add_location(h1, file$1, 12, 4, 277);
     		},
     		m: function mount(target, anchor) {
@@ -2662,14 +2669,14 @@ var app = (function () {
     }
 
     // (10:0) {#if correcto}
-    function create_if_block_4(ctx) {
+    function create_if_block_4$1(ctx) {
     	let h1;
 
     	const block = {
     		c: function create() {
     			h1 = element("h1");
     			h1.textContent = "🎉 Está Correcto! 🍾";
-    			attr_dev(h1, "class", "svelte-1xqsiqw");
+    			attr_dev(h1, "class", "svelte-lpvjxs");
     			add_location(h1, file$1, 10, 4, 233);
     		},
     		m: function mount(target, anchor) {
@@ -2682,7 +2689,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_4.name,
+    		id: create_if_block_4$1.name,
     		type: "if",
     		source: "(10:0) {#if correcto}",
     		ctx
@@ -2723,7 +2730,7 @@ var app = (function () {
     }
 
     // (20:29) 
-    function create_if_block_3(ctx) {
+    function create_if_block_3$1(ctx) {
     	let catarina;
     	let current;
     	catarina = new Catarina({ $$inline: true });
@@ -2752,7 +2759,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_3.name,
+    		id: create_if_block_3$1.name,
     		type: "if",
     		source: "(20:29) ",
     		ctx
@@ -2762,7 +2769,7 @@ var app = (function () {
     }
 
     // (18:24) 
-    function create_if_block_2(ctx) {
+    function create_if_block_2$1(ctx) {
     	let rio;
     	let current;
     	rio = new Rio({ $$inline: true });
@@ -2791,7 +2798,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_2.name,
+    		id: create_if_block_2$1.name,
     		type: "if",
     		source: "(18:24) ",
     		ctx
@@ -2852,10 +2859,11 @@ var app = (function () {
     			h3.textContent = "✨ +1 Ponto ✨";
     			t1 = space();
     			img = element("img");
-    			attr_dev(h3, "class", "svelte-1xqsiqw");
+    			attr_dev(h3, "class", "svelte-lpvjxs");
     			add_location(h3, file$1, 26, 4, 494);
+    			attr_dev(img, "alt", "gif vitorioso");
     			if (!src_url_equal(img.src, img_src_value = "./gifs/1.webp")) attr_dev(img, "src", img_src_value);
-    			attr_dev(img, "class", "svelte-1xqsiqw");
+    			attr_dev(img, "class", "svelte-lpvjxs");
     			add_location(img, file$1, 27, 4, 521);
     		},
     		m: function mount(target, anchor) {
@@ -2890,13 +2898,13 @@ var app = (function () {
     	let current;
 
     	function select_block_type(ctx, dirty) {
-    		if (/*correcto*/ ctx[0]) return create_if_block_4;
+    		if (/*correcto*/ ctx[0]) return create_if_block_4$1;
     		return create_else_block_1$1;
     	}
 
     	let current_block_type = select_block_type(ctx);
     	let if_block0 = current_block_type(ctx);
-    	const if_block_creators = [create_if_block_1$1, create_if_block_2, create_if_block_3, create_else_block$1];
+    	const if_block_creators = [create_if_block_1$1, create_if_block_2$1, create_if_block_3$1, create_else_block$1];
     	const if_blocks = [];
 
     	function select_block_type_1(ctx, dirty) {
@@ -3081,193 +3089,246 @@ var app = (function () {
     const { console: console_1 } = globals;
     const file = "src\\Content.svelte";
 
-    // (118:4) {:else}
-    function create_else_block_1(ctx) {
+    // (193:32) 
+    function create_if_block_4(ctx) {
     	let h1;
+    	let t1;
+    	let h2;
+    	let t2;
+    	let t3;
+    	let t4;
+    	let t5;
+    	let t6;
+    	let h4;
+    	let t8;
+    	let img;
+    	let img_src_value;
+    	let t9;
+    	let button;
+    	let t11;
+    	let p0;
+    	let t13;
+    	let p1;
+    	let t14;
+    	let a;
+    	let mounted;
+    	let dispose;
 
     	const block = {
     		c: function create() {
     			h1 = element("h1");
-    			h1.textContent = "Loading...";
-    			add_location(h1, file, 118, 8, 2897);
+    			h1.textContent = "✨ Fim! ✨";
+    			t1 = space();
+    			h2 = element("h2");
+    			t2 = text("Pontuação Final: ");
+    			t3 = text(/*pontos*/ ctx[0]);
+    			t4 = text("/");
+    			t5 = text(/*pontos_máximos*/ ctx[3]);
+    			t6 = space();
+    			h4 = element("h4");
+    			h4.textContent = "Partilha com os teus amigos para ver quem é que tem futuro como\r\n            comentador político, ou não";
+    			t8 = space();
+    			img = element("img");
+    			t9 = space();
+    			button = element("button");
+    			button.textContent = "Anunciar a boa nova";
+    			t11 = space();
+    			p0 = element("p");
+    			p0.textContent = "Então e quem trouxe quem trouxe esta pérola?";
+    			t13 = space();
+    			p1 = element("p");
+    			t14 = text("Não foi o ");
+    			a = element("a");
+    			a.textContent = "Pingo Doce";
+    			set_style(h1, "margin-top", "5vh");
+    			add_location(h1, file, 193, 8, 5392);
+    			attr_dev(h2, "class", "svelte-aye4k3");
+    			add_location(h2, file, 195, 8, 5446);
+    			attr_dev(h4, "class", "svelte-aye4k3");
+    			add_location(h4, file, 197, 8, 5509);
+    			set_style(img, "max-width", "300px");
+    			attr_dev(img, "alt", "gif de senhora a tentar cantar");
+    			if (!src_url_equal(img.src, img_src_value = "./gifs/fim.webp")) attr_dev(img, "src", img_src_value);
+    			attr_dev(img, "class", "svelte-aye4k3");
+    			add_location(img, file, 202, 8, 5658);
+    			set_style(button, "margin-top", "1vh");
+    			add_location(button, file, 207, 8, 5807);
+    			set_style(p0, "margin-top", "10vh");
+    			attr_dev(p0, "class", "svelte-aye4k3");
+    			add_location(p0, file, 211, 8, 5930);
+    			attr_dev(a, "href", "https://luissilva.eu");
+    			add_location(a, file, 215, 22, 6068);
+    			attr_dev(p1, "class", "svelte-aye4k3");
+    			add_location(p1, file, 214, 8, 6041);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h1, anchor);
+    			insert_dev(target, t1, anchor);
+    			insert_dev(target, h2, anchor);
+    			append_dev(h2, t2);
+    			append_dev(h2, t3);
+    			append_dev(h2, t4);
+    			append_dev(h2, t5);
+    			insert_dev(target, t6, anchor);
+    			insert_dev(target, h4, anchor);
+    			insert_dev(target, t8, anchor);
+    			insert_dev(target, img, anchor);
+    			insert_dev(target, t9, anchor);
+    			insert_dev(target, button, anchor);
+    			insert_dev(target, t11, anchor);
+    			insert_dev(target, p0, anchor);
+    			insert_dev(target, t13, anchor);
+    			insert_dev(target, p1, anchor);
+    			append_dev(p1, t14);
+    			append_dev(p1, a);
+
+    			if (!mounted) {
+    				dispose = listen_dev(button, "click", /*updateclipboard*/ ctx[7], false, false, false);
+    				mounted = true;
+    			}
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*pontos*/ 1) set_data_dev(t3, /*pontos*/ ctx[0]);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(h1);
+    			if (detaching) detach_dev(t1);
+    			if (detaching) detach_dev(h2);
+    			if (detaching) detach_dev(t6);
+    			if (detaching) detach_dev(h4);
+    			if (detaching) detach_dev(t8);
+    			if (detaching) detach_dev(img);
+    			if (detaching) detach_dev(t9);
+    			if (detaching) detach_dev(button);
+    			if (detaching) detach_dev(t11);
+    			if (detaching) detach_dev(p0);
+    			if (detaching) detach_dev(t13);
+    			if (detaching) detach_dev(p1);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_4.name,
+    		type: "if",
+    		source: "(193:32) ",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (166:34) 
+    function create_if_block_3(ctx) {
+    	let h1;
+    	let t1;
+    	let p0;
+    	let t2;
+    	let a;
+    	let t4;
+    	let t5;
+    	let p1;
+    	let t7;
+    	let h3;
+    	let t9;
+    	let img;
+    	let img_src_value;
+    	let t10;
+    	let button;
+    	let mounted;
+    	let dispose;
+
+    	const block = {
+    		c: function create() {
+    			h1 = element("h1");
+    			h1.textContent = "Sõr Doutor?";
+    			t1 = space();
+    			p0 = element("p");
+    			t2 = text("Durante a campanha das ");
+    			a = element("a");
+    			a.textContent = "legislativas 2022";
+    			t4 = text(" toda a gente falou da TAP ✈️, do rendimento rinimo universal 💰, da\r\n            pena de morte 💀, do orçamento chumbado 📉, das pontes desfeitas 💣 e\r\n            refeitas 🔨.");
+    			t5 = space();
+    			p1 = element("p");
+    			p1.textContent = "Mas ninguém levantou o problema que vale a pena discutir 📝...\r\n            Sempre que falam uns com os outros e mesmo quando são entrevistados\r\n            é sõr doutor 🤓 para aqui e para ali";
+    			t7 = space();
+    			h3 = element("h3");
+    			h3.textContent = "Mas são todos sõr Doutor?";
+    			t9 = space();
+    			img = element("img");
+    			t10 = space();
+    			button = element("button");
+    			button.textContent = "Clica para investigar";
+    			add_location(h1, file, 166, 8, 4377);
+    			attr_dev(a, "href", "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%B5es_legislativas_portuguesas_de_2022");
+    			add_location(a, file, 168, 35, 4447);
+    			attr_dev(p0, "class", "svelte-aye4k3");
+    			add_location(p0, file, 167, 8, 4407);
+    			attr_dev(p1, "class", "svelte-aye4k3");
+    			add_location(p1, file, 175, 8, 4810);
+    			add_location(h3, file, 181, 8, 5046);
+    			set_style(img, "max-width", "200px");
+    			attr_dev(img, "alt", "pessoa a mergulhar");
+    			if (!src_url_equal(img.src, img_src_value = "./gifs/investigar.webp")) attr_dev(img, "src", img_src_value);
+    			attr_dev(img, "class", "svelte-aye4k3");
+    			add_location(img, file, 183, 8, 5092);
+    			set_style(button, "margin-top", "5px");
+    			add_location(button, file, 189, 8, 5238);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, h1, anchor);
+    			insert_dev(target, t1, anchor);
+    			insert_dev(target, p0, anchor);
+    			append_dev(p0, t2);
+    			append_dev(p0, a);
+    			append_dev(p0, t4);
+    			insert_dev(target, t5, anchor);
+    			insert_dev(target, p1, anchor);
+    			insert_dev(target, t7, anchor);
+    			insert_dev(target, h3, anchor);
+    			insert_dev(target, t9, anchor);
+    			insert_dev(target, img, anchor);
+    			insert_dev(target, t10, anchor);
+    			insert_dev(target, button, anchor);
+
+    			if (!mounted) {
+    				dispose = listen_dev(button, "click", /*começarJogo*/ ctx[6], false, false, false);
+    				mounted = true;
+    			}
     		},
     		p: noop,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(h1);
+    			if (detaching) detach_dev(t1);
+    			if (detaching) detach_dev(p0);
+    			if (detaching) detach_dev(t5);
+    			if (detaching) detach_dev(p1);
+    			if (detaching) detach_dev(t7);
+    			if (detaching) detach_dev(h3);
+    			if (detaching) detach_dev(t9);
+    			if (detaching) detach_dev(img);
+    			if (detaching) detach_dev(t10);
+    			if (detaching) detach_dev(button);
+    			mounted = false;
+    			dispose();
     		}
     	};
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_else_block_1.name,
-    		type: "else",
-    		source: "(118:4) {:else}",
+    		id: create_if_block_3.name,
+    		type: "if",
+    		source: "(166:34) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (109:4) {#if mostrar}
+    // (132:4) {#if estado == "jogar"}
     function create_if_block(ctx) {
-    	let t;
-    	let div;
-    	let img;
-    	let img_alt_value;
-    	let img_src_value;
-
-    	function select_block_type_1(ctx, dirty) {
-    		if (/*mostrar*/ ctx[1]["sexo"]) return create_if_block_1;
-    		return create_else_block;
-    	}
-
-    	let current_block_type = select_block_type_1(ctx);
-    	let if_block = current_block_type(ctx);
-
-    	const block = {
-    		c: function create() {
-    			if_block.c();
-    			t = space();
-    			div = element("div");
-    			img = element("img");
-    			attr_dev(img, "alt", img_alt_value = /*mostrar*/ ctx[1]["nome"]);
-    			if (!src_url_equal(img.src, img_src_value = /*mostrar*/ ctx[1]["img"])) attr_dev(img, "src", img_src_value);
-    			attr_dev(img, "class", "svelte-ulsd6n");
-    			add_location(img, file, 115, 12, 2808);
-    			add_location(div, file, 114, 8, 2789);
-    		},
-    		m: function mount(target, anchor) {
-    			if_block.m(target, anchor);
-    			insert_dev(target, t, anchor);
-    			insert_dev(target, div, anchor);
-    			append_dev(div, img);
-    		},
-    		p: function update(ctx, dirty) {
-    			if (current_block_type === (current_block_type = select_block_type_1(ctx)) && if_block) {
-    				if_block.p(ctx, dirty);
-    			} else {
-    				if_block.d(1);
-    				if_block = current_block_type(ctx);
-
-    				if (if_block) {
-    					if_block.c();
-    					if_block.m(t.parentNode, t);
-    				}
-    			}
-
-    			if (dirty & /*mostrar*/ 2 && img_alt_value !== (img_alt_value = /*mostrar*/ ctx[1]["nome"])) {
-    				attr_dev(img, "alt", img_alt_value);
-    			}
-
-    			if (dirty & /*mostrar*/ 2 && !src_url_equal(img.src, img_src_value = /*mostrar*/ ctx[1]["img"])) {
-    				attr_dev(img, "src", img_src_value);
-    			}
-    		},
-    		d: function destroy(detaching) {
-    			if_block.d(detaching);
-    			if (detaching) detach_dev(t);
-    			if (detaching) detach_dev(div);
-    		}
-    	};
-
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
-    		id: create_if_block.name,
-    		type: "if",
-    		source: "(109:4) {#if mostrar}",
-    		ctx
-    	});
-
-    	return block;
-    }
-
-    // (112:8) {:else}
-    function create_else_block(ctx) {
-    	let h1;
-    	let t0;
-    	let t1_value = /*mostrar*/ ctx[1]["nome"] + "";
-    	let t1;
-    	let t2;
-
-    	const block = {
-    		c: function create() {
-    			h1 = element("h1");
-    			t0 = text("O ");
-    			t1 = text(t1_value);
-    			t2 = text(" é Sõr Doutor?");
-    			add_location(h1, file, 112, 12, 2722);
-    		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, h1, anchor);
-    			append_dev(h1, t0);
-    			append_dev(h1, t1);
-    			append_dev(h1, t2);
-    		},
-    		p: function update(ctx, dirty) {
-    			if (dirty & /*mostrar*/ 2 && t1_value !== (t1_value = /*mostrar*/ ctx[1]["nome"] + "")) set_data_dev(t1, t1_value);
-    		},
-    		d: function destroy(detaching) {
-    			if (detaching) detach_dev(h1);
-    		}
-    	};
-
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
-    		id: create_else_block.name,
-    		type: "else",
-    		source: "(112:8) {:else}",
-    		ctx
-    	});
-
-    	return block;
-    }
-
-    // (110:8) {#if mostrar["sexo"]}
-    function create_if_block_1(ctx) {
-    	let h1;
-    	let t0;
-    	let t1_value = /*mostrar*/ ctx[1]["nome"] + "";
-    	let t1;
-    	let t2;
-
-    	const block = {
-    		c: function create() {
-    			h1 = element("h1");
-    			t0 = text("A ");
-    			t1 = text(t1_value);
-    			t2 = text(" é Sõr Doutora?");
-    			add_location(h1, file, 110, 12, 2648);
-    		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, h1, anchor);
-    			append_dev(h1, t0);
-    			append_dev(h1, t1);
-    			append_dev(h1, t2);
-    		},
-    		p: function update(ctx, dirty) {
-    			if (dirty & /*mostrar*/ 2 && t1_value !== (t1_value = /*mostrar*/ ctx[1]["nome"] + "")) set_data_dev(t1, t1_value);
-    		},
-    		d: function destroy(detaching) {
-    			if (detaching) detach_dev(h1);
-    		}
-    	};
-
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
-    		id: create_if_block_1.name,
-    		type: "if",
-    		source: "(110:8) {#if mostrar[\\\"sexo\\\"]}",
-    		ctx
-    	});
-
-    	return block;
-    }
-
-    function create_fragment$1(ctx) {
-    	let div2;
     	let t0;
     	let div1;
     	let div0;
@@ -3285,17 +3346,16 @@ var app = (function () {
     	let mounted;
     	let dispose;
 
-    	function select_block_type(ctx, dirty) {
-    		if (/*mostrar*/ ctx[1]) return create_if_block;
+    	function select_block_type_1(ctx, dirty) {
+    		if (/*mostrar*/ ctx[2]) return create_if_block_1;
     		return create_else_block_1;
     	}
 
-    	let current_block_type = select_block_type(ctx);
+    	let current_block_type = select_block_type_1(ctx);
     	let if_block = current_block_type(ctx);
 
     	const block = {
     		c: function create() {
-    			div2 = element("div");
     			if_block.c();
     			t0 = space();
     			div1 = element("div");
@@ -3312,42 +3372,37 @@ var app = (function () {
     			t6 = text("Pontuação: ");
     			t7 = text(/*pontos*/ ctx[0]);
     			t8 = text(" / ");
-    			t9 = text(/*pontos_máximos*/ ctx[2]);
+    			t9 = text(/*pontos_máximos*/ ctx[3]);
     			attr_dev(button0, "name", "submit");
-    			attr_dev(button0, "class", "action_btn svelte-ulsd6n");
+    			attr_dev(button0, "class", "action_btn svelte-aye4k3");
     			attr_dev(button0, "type", "submit");
-    			add_location(button0, file, 123, 12, 3004);
+    			add_location(button0, file, 147, 16, 3771);
     			attr_dev(button1, "name", "submit");
-    			attr_dev(button1, "class", "action_btn cancel svelte-ulsd6n");
+    			attr_dev(button1, "class", "action_btn cancel svelte-aye4k3");
     			attr_dev(button1, "type", "submit");
-    			add_location(button1, file, 129, 12, 3191);
+    			add_location(button1, file, 153, 16, 3982);
     			attr_dev(p, "id", "saved");
-    			add_location(p, file, 136, 12, 3401);
-    			attr_dev(div0, "class", "action_btn svelte-ulsd6n");
-    			add_location(div0, file, 122, 8, 2966);
-    			attr_dev(div1, "class", "buttons svelte-ulsd6n");
-    			add_location(div1, file, 121, 4, 2935);
-    			attr_dev(h2, "class", "svelte-ulsd6n");
-    			add_location(h2, file, 140, 4, 3453);
-    			attr_dev(div2, "class", "center svelte-ulsd6n");
-    			add_location(div2, file, 107, 0, 2564);
-    		},
-    		l: function claim(nodes) {
-    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    			attr_dev(p, "class", "svelte-aye4k3");
+    			add_location(p, file, 160, 16, 4220);
+    			attr_dev(div0, "class", "action_btn svelte-aye4k3");
+    			add_location(div0, file, 146, 12, 3729);
+    			attr_dev(div1, "class", "buttons svelte-aye4k3");
+    			add_location(div1, file, 145, 8, 3694);
+    			attr_dev(h2, "class", "svelte-aye4k3");
+    			add_location(h2, file, 164, 8, 4284);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, div2, anchor);
-    			if_block.m(div2, null);
-    			append_dev(div2, t0);
-    			append_dev(div2, div1);
+    			if_block.m(target, anchor);
+    			insert_dev(target, t0, anchor);
+    			insert_dev(target, div1, anchor);
     			append_dev(div1, div0);
     			append_dev(div0, button0);
     			append_dev(div0, t2);
     			append_dev(div0, button1);
     			append_dev(div0, t4);
     			append_dev(div0, p);
-    			append_dev(div2, t5);
-    			append_dev(div2, h2);
+    			insert_dev(target, t5, anchor);
+    			insert_dev(target, h2, anchor);
     			append_dev(h2, t6);
     			append_dev(h2, t7);
     			append_dev(h2, t8);
@@ -3355,15 +3410,15 @@ var app = (function () {
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(button0, "click", /*doutor*/ ctx[3], false, false, false),
-    					listen_dev(button1, "click", /*plebe*/ ctx[4], false, false, false)
+    					listen_dev(button0, "click", /*doutor*/ ctx[4], false, false, false),
+    					listen_dev(button1, "click", /*plebe*/ ctx[5], false, false, false)
     				];
 
     				mounted = true;
     			}
     		},
-    		p: function update(ctx, [dirty]) {
-    			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block) {
+    		p: function update(ctx, dirty) {
+    			if (current_block_type === (current_block_type = select_block_type_1(ctx)) && if_block) {
     				if_block.p(ctx, dirty);
     			} else {
     				if_block.d(1);
@@ -3371,19 +3426,266 @@ var app = (function () {
 
     				if (if_block) {
     					if_block.c();
-    					if_block.m(div2, t0);
+    					if_block.m(t0.parentNode, t0);
     				}
     			}
 
     			if (dirty & /*pontos*/ 1) set_data_dev(t7, /*pontos*/ ctx[0]);
     		},
+    		d: function destroy(detaching) {
+    			if_block.d(detaching);
+    			if (detaching) detach_dev(t0);
+    			if (detaching) detach_dev(div1);
+    			if (detaching) detach_dev(t5);
+    			if (detaching) detach_dev(h2);
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block.name,
+    		type: "if",
+    		source: "(132:4) {#if estado == \\\"jogar\\\"}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (142:8) {:else}
+    function create_else_block_1(ctx) {
+    	let h1;
+
+    	const block = {
+    		c: function create() {
+    			h1 = element("h1");
+    			h1.textContent = "Loading...";
+    			add_location(h1, file, 142, 12, 3648);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, h1, anchor);
+    		},
+    		p: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(h1);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_else_block_1.name,
+    		type: "else",
+    		source: "(142:8) {:else}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (133:8) {#if mostrar}
+    function create_if_block_1(ctx) {
+    	let t;
+    	let div;
+    	let img;
+    	let img_alt_value;
+    	let img_src_value;
+
+    	function select_block_type_2(ctx, dirty) {
+    		if (/*mostrar*/ ctx[2]["sexo"]) return create_if_block_2;
+    		return create_else_block;
+    	}
+
+    	let current_block_type = select_block_type_2(ctx);
+    	let if_block = current_block_type(ctx);
+
+    	const block = {
+    		c: function create() {
+    			if_block.c();
+    			t = space();
+    			div = element("div");
+    			img = element("img");
+    			attr_dev(img, "alt", img_alt_value = /*mostrar*/ ctx[2]["nome"]);
+    			if (!src_url_equal(img.src, img_src_value = /*mostrar*/ ctx[2]["img"])) attr_dev(img, "src", img_src_value);
+    			attr_dev(img, "class", "svelte-aye4k3");
+    			add_location(img, file, 139, 16, 3547);
+    			add_location(div, file, 138, 12, 3524);
+    		},
+    		m: function mount(target, anchor) {
+    			if_block.m(target, anchor);
+    			insert_dev(target, t, anchor);
+    			insert_dev(target, div, anchor);
+    			append_dev(div, img);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (current_block_type === (current_block_type = select_block_type_2(ctx)) && if_block) {
+    				if_block.p(ctx, dirty);
+    			} else {
+    				if_block.d(1);
+    				if_block = current_block_type(ctx);
+
+    				if (if_block) {
+    					if_block.c();
+    					if_block.m(t.parentNode, t);
+    				}
+    			}
+
+    			if (dirty & /*mostrar*/ 4 && img_alt_value !== (img_alt_value = /*mostrar*/ ctx[2]["nome"])) {
+    				attr_dev(img, "alt", img_alt_value);
+    			}
+
+    			if (dirty & /*mostrar*/ 4 && !src_url_equal(img.src, img_src_value = /*mostrar*/ ctx[2]["img"])) {
+    				attr_dev(img, "src", img_src_value);
+    			}
+    		},
+    		d: function destroy(detaching) {
+    			if_block.d(detaching);
+    			if (detaching) detach_dev(t);
+    			if (detaching) detach_dev(div);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_1.name,
+    		type: "if",
+    		source: "(133:8) {#if mostrar}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (136:12) {:else}
+    function create_else_block(ctx) {
+    	let h1;
+    	let t0;
+    	let t1_value = /*mostrar*/ ctx[2]["nome"] + "";
+    	let t1;
+    	let t2;
+
+    	const block = {
+    		c: function create() {
+    			h1 = element("h1");
+    			t0 = text("O ");
+    			t1 = text(t1_value);
+    			t2 = text(" é Sõr Doutor?");
+    			add_location(h1, file, 136, 16, 3449);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, h1, anchor);
+    			append_dev(h1, t0);
+    			append_dev(h1, t1);
+    			append_dev(h1, t2);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*mostrar*/ 4 && t1_value !== (t1_value = /*mostrar*/ ctx[2]["nome"] + "")) set_data_dev(t1, t1_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(h1);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_else_block.name,
+    		type: "else",
+    		source: "(136:12) {:else}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (134:12) {#if mostrar["sexo"]}
+    function create_if_block_2(ctx) {
+    	let h1;
+    	let t0;
+    	let t1_value = /*mostrar*/ ctx[2]["nome"] + "";
+    	let t1;
+    	let t2;
+
+    	const block = {
+    		c: function create() {
+    			h1 = element("h1");
+    			t0 = text("A ");
+    			t1 = text(t1_value);
+    			t2 = text(" é Sõr Doutora?");
+    			add_location(h1, file, 134, 16, 3367);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, h1, anchor);
+    			append_dev(h1, t0);
+    			append_dev(h1, t1);
+    			append_dev(h1, t2);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*mostrar*/ 4 && t1_value !== (t1_value = /*mostrar*/ ctx[2]["nome"] + "")) set_data_dev(t1, t1_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(h1);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_2.name,
+    		type: "if",
+    		source: "(134:12) {#if mostrar[\\\"sexo\\\"]}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment$1(ctx) {
+    	let div;
+
+    	function select_block_type(ctx, dirty) {
+    		if (/*estado*/ ctx[1] == "jogar") return create_if_block;
+    		if (/*estado*/ ctx[1] == "inicial") return create_if_block_3;
+    		if (/*estado*/ ctx[1] == "final") return create_if_block_4;
+    	}
+
+    	let current_block_type = select_block_type(ctx);
+    	let if_block = current_block_type && current_block_type(ctx);
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+    			if (if_block) if_block.c();
+    			attr_dev(div, "class", "center svelte-aye4k3");
+    			add_location(div, file, 130, 0, 3242);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+    			if (if_block) if_block.m(div, null);
+    		},
+    		p: function update(ctx, [dirty]) {
+    			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block) {
+    				if_block.p(ctx, dirty);
+    			} else {
+    				if (if_block) if_block.d(1);
+    				if_block = current_block_type && current_block_type(ctx);
+
+    				if (if_block) {
+    					if_block.c();
+    					if_block.m(div, null);
+    				}
+    			}
+    		},
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div2);
-    			if_block.d();
-    			mounted = false;
-    			run_all(dispose);
+    			if (detaching) detach_dev(div);
+
+    			if (if_block) {
+    				if_block.d();
+    			}
     		}
     	};
 
@@ -3420,6 +3722,7 @@ var app = (function () {
     	validate_slots('Content', slots, []);
     	const { open } = getContext("simple-modal");
     	let pontos = 0;
+    	let estado = "final";
 
     	let concorrentes = [
     		{
@@ -3452,13 +3755,18 @@ var app = (function () {
 
     	onMount(async () => {
     		shuffle(ordem);
-    		$$invalidate(1, mostrar = concorrentes[ordem[ordem_a_mostar]]);
+    		$$invalidate(2, mostrar = concorrentes[ordem[ordem_a_mostar]]);
     		console.log(mostrar);
     	});
 
     	function next(event) {
     		ordem_a_mostar = ordem_a_mostar + 1;
-    		$$invalidate(1, mostrar = concorrentes[ordem[ordem_a_mostar]]);
+
+    		if (ordem_a_mostar == concorrentes.length) {
+    			$$invalidate(1, estado = "final");
+    		}
+
+    		$$invalidate(2, mostrar = concorrentes[ordem[ordem_a_mostar]]);
     	}
 
     	const doutor = () => {
@@ -3489,6 +3797,23 @@ var app = (function () {
     		});
     	};
 
+    	const começarJogo = () => {
+    		$$invalidate(1, estado = "jogar");
+    	};
+
+    	function updateclipboard() {
+    		let newClip = "Sõr doutor?\nAcertei " + pontos + ".💪🧐";
+
+    		navigator.clipboard.writeText(newClip).then(
+    			function () {
+    				alert("Copiei os resultados para o clipboard. Dá paste onde quiseres!");
+    			},
+    			function () {
+    				alert("Algo não correu bem");
+    			}
+    		);
+    	}
+
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
@@ -3498,10 +3823,12 @@ var app = (function () {
     	$$self.$capture_state = () => ({
     		onMount,
     		getContext,
+    		bubble,
     		fly,
     		PopupLong,
     		open,
     		pontos,
+    		estado,
     		shuffle,
     		concorrentes,
     		pontos_máximos,
@@ -3511,23 +3838,35 @@ var app = (function () {
     		next,
     		doutor,
     		plebe,
-    		mostrarInfo
+    		mostrarInfo,
+    		começarJogo,
+    		updateclipboard
     	});
 
     	$$self.$inject_state = $$props => {
     		if ('pontos' in $$props) $$invalidate(0, pontos = $$props.pontos);
+    		if ('estado' in $$props) $$invalidate(1, estado = $$props.estado);
     		if ('concorrentes' in $$props) concorrentes = $$props.concorrentes;
-    		if ('pontos_máximos' in $$props) $$invalidate(2, pontos_máximos = $$props.pontos_máximos);
+    		if ('pontos_máximos' in $$props) $$invalidate(3, pontos_máximos = $$props.pontos_máximos);
     		if ('ordem' in $$props) ordem = $$props.ordem;
     		if ('ordem_a_mostar' in $$props) ordem_a_mostar = $$props.ordem_a_mostar;
-    		if ('mostrar' in $$props) $$invalidate(1, mostrar = $$props.mostrar);
+    		if ('mostrar' in $$props) $$invalidate(2, mostrar = $$props.mostrar);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [pontos, mostrar, pontos_máximos, doutor, plebe];
+    	return [
+    		pontos,
+    		estado,
+    		mostrar,
+    		pontos_máximos,
+    		doutor,
+    		plebe,
+    		começarJogo,
+    		updateclipboard
+    	];
     }
 
     class Content extends SvelteComponentDev {

@@ -4,7 +4,7 @@
 <h3>
     Segundo a <a
         href="https://pt.wikipedia.org/wiki/Ant%C3%B3nio_Costa#Inf%C3%A2ncia_e_educa%C3%A7%C3%A3o"
-        >Wikipedipa</a
+        >Wikipedia</a
     >
 </h3>
 

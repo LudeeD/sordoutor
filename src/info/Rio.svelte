@@ -4,7 +4,7 @@
 <h3>
     Segundo a <a
         href="https://pt.wikipedia.org/wiki/Rui_Rio#Carreira_acad%C3%A9mica"
-        >Wikipedipa</a
+        >Wikipedia</a
     >
 </h3>
 

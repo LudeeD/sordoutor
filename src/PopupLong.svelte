@@ -25,17 +25,13 @@
 
 {#if correcto}
     <h3>✨ +1 Ponto ✨</h3>
-    <img src="./gifs/1.webp" />
+    <img alt="gif vitorioso" src="./gifs/1.webp" />
 {/if}
 
 <style>
     h1 {
         font-size: 2rem;
         text-align: center;
-    }
-
-    h2 {
-        font-size: 1.25rem;
     }
 
     h3 {
