@@ -8,7 +8,8 @@
     const { open } = getContext("simple-modal");
 
     let pontos = 0;
-    let estado = "final";
+    let errados = 0;
+    let estado = "inicial";
 
     function shuffle(array) {
         let currentIndex = array.length,
@@ -52,6 +53,48 @@
             doutor: false,
             sexo: true,
         },
+        {
+            id: "Jeronimo",
+            nome: "Jerónimo de Sousa",
+            img: "./images/Jeronimo.jpg",
+            doutor: false,
+            sexo: false,
+        },
+        {
+            id: "Xicao",
+            nome: "Francisco Rodrigues dos Santos",
+            img: "./images/Xicao.jpg",
+            doutor: false,
+            sexo: false,
+        },
+        {
+            id: "Ines",
+            nome: "Inês Sousa Real",
+            img: "./images/Ines.jpg",
+            doutor: false,
+            sexo: true,
+        },
+        {
+            id: "Ventura",
+            nome: "André Ventura",
+            img: "./images/Ventura.png",
+            doutor: true,
+            sexo: false,
+        },
+        {
+            id: "Joao",
+            nome: "João Cotrim de Figueiredo",
+            img: "./images/Joao.png",
+            doutor: false,
+            sexo: false,
+        },
+        {
+            id: "Rui",
+            nome: "Rui Tavares",
+            img: "./images/Rui.png",
+            doutor: true,
+            sexo: false,
+        },
     ];
 
     let pontos_máximos = concorrentes.length;
@@ -81,6 +124,8 @@
 
         if (acertou) {
             pontos = pontos + 1;
+        } else {
+            errados = errados + 1;
         }
 
         mostrarInfo(acertou);
@@ -91,6 +136,8 @@
 
         if (acertou) {
             pontos = pontos + 1;
+        } else {
+            errados = errados + 1;
         }
 
         mostrarInfo(acertou);
@@ -99,7 +146,12 @@
     const mostrarInfo = (acertou) => {
         open(
             PopupLong,
-            { correcto: acertou, info: mostrar["id"] },
+            {
+                correcto: acertou,
+                info: mostrar["id"],
+                pontos: pontos,
+                errados: errados,
+            },
             { transitionWindow: fly },
             {
                 onClose: () => {
@@ -219,6 +271,11 @@
 </div>
 
 <style>
+    @media screen and (max-width: 600px) {
+        h1 {
+            font-size: 1.5rem;
+        }
+    }
     h2 {
         margin-top: 5px;
     }
