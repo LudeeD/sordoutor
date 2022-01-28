@@ -10,14 +10,16 @@
 
 <p>
     <q>
-        Fez a primeira classe em São Tomé (...) a segunda e terceira classes em Cabo Verde. Regressa a Portugal aos nove
-        anos e vive em cidades como Aveiro, Vila Nova de Gaia e Lisboa.
-        Licenciada em Línguas e Literaturas Modernas, tem um mestrado em
-        Linguística e <u>frequência de doutoramento</u> em Didática das Línguas.
+        Fez a primeira classe em São Tomé (...) a segunda e terceira classes em
+        Cabo Verde. Regressa a Portugal aos nove anos e vive em cidades como
+        Aveiro, Vila Nova de Gaia e Lisboa. Licenciada em Línguas e Literaturas
+        Modernas, tem um mestrado em Linguística e <u
+            >frequência de doutoramento</u
+        > em Didática das Línguas.
     </q>
 </p>
 
-<p>Portanto, <b>é mais ou menos</b> Sõr Doutora !</p>
+<p>Portanto, <b>é mais ou menos</b> Sôr Doutora !</p>
 
 <style>
     p {

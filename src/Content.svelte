@@ -166,7 +166,7 @@
     };
 
     function updateclipboard() {
-        let newClip = "Sõr doutor?\nAcertei " + pontos + ".💪🧐";
+        let newClip = "Sôr doutor?\nAcertei " + pontos + ".💪🧐";
         navigator.clipboard.writeText(newClip).then(
             function () {
                 alert(
@@ -184,9 +184,9 @@
     {#if estado == "jogar"}
         {#if mostrar}
             {#if mostrar["sexo"]}
-                <h1>A {mostrar["nome"]} é Sõr Doutora?</h1>
+                <h1>A {mostrar["nome"]} é Sôr Doutora?</h1>
             {:else}
-                <h1>O {mostrar["nome"]} é Sõr Doutor?</h1>
+                <h1>O {mostrar["nome"]} é Sôr Doutor?</h1>
             {/if}
             <div>
                 <img alt={mostrar["nome"]} src={mostrar["img"]} />
@@ -216,22 +216,22 @@
 
         <h2>Pontuação: {pontos} / {pontos_máximos}</h2>
     {:else if estado == "inicial"}
-        <h1>Sõr Doutor?</h1>
+        <h1>Sôr Doutor?</h1>
         <p>
             Durante a campanha das <a
                 href="https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%B5es_legislativas_portuguesas_de_2022"
                 >legislativas 2022</a
-            > toda a gente falou da TAP ✈️, do rendimento rinimo universal 💰, da
+            > toda a gente falou da TAP ✈️, do rendimento mínimo universal 💰, da
             pena de morte 💀, do orçamento chumbado 📉, das pontes desfeitas 💣 e
             refeitas 🔨.
         </p>
         <p>
             Mas ninguém levantou o problema que vale a pena discutir 📝...
             Sempre que falam uns com os outros e mesmo quando são entrevistados
-            é sõr doutor 🤓 para aqui e para ali
+            é Sôr doutor 🤓 para aqui e para ali
         </p>
 
-        <h3>Mas são todos sõr Doutor?</h3>
+        <h3>Mas são todos Sôr Doutor?</h3>
 
         <img
             style="max-width: 200px"

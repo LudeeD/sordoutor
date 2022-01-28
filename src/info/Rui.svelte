@@ -17,7 +17,7 @@
     </q>
 </p>
 
-<p>Portanto, <b>é sim</b> Sõr Doutor! Viva!</p>
+<p>Portanto, <b>é sim</b> Sôr Doutor! Viva!</p>
 
 <style>
     p {

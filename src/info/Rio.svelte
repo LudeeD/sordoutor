@@ -19,7 +19,7 @@
     </q>
 </p>
 
-<p>Portanto, <b>não é</b> Sõr Doutor !</p>
+<p>Portanto, <b>não é</b> Sôr Doutor !</p>
 
 <style>
     p {
